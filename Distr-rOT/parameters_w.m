@@ -28,7 +28,7 @@ params.delta_ridge = 4e-3;  % ridge (delta/2)*||alpha||^2
 params.terminal = 'l2';     % 'kl' or 'l2'
 params.kappa = 0.2;         % 'kl': weight of the KL terminal cost
 params.kl_floor = 1e-6;     % 'kl': floor on the target, relative to its max
-params.epsilon_reg = 0.15;  % 'l2': eps in the terminal cost ||rho - rho*||^2 / (2 eps)
+params.epsilon_reg = 0;  % 'l2': eps in the terminal cost ||rho - rho*||^2 / (2 eps)
 
 %% Grid on [-8, 8]^2
 grid_res = 100;
