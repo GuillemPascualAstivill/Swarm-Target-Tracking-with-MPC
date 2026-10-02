@@ -1,0 +1,73 @@
+54 runs.
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 20 workers.
+(b) eps = 0.25, U = 0.1, MPC, seed 2: mean ||u||^2 = 2.151e-05, final W1 = 0.4510 (120.7 min)
+(b) eps = 0.25, U = 0.03, MPC, seed 2: mean ||u||^2 = 1.297e-05, final W1 = 0.4559 (122.4 min)
+(b) eps = 0.25, U = 0.05, MPC, seed 5: mean ||u||^2 = 1.215e-05, final W1 = 0.4542 (122.9 min)
+(b) eps = 0.25, U = 0.1, MPC, seed 5: mean ||u||^2 = 1.936e-05, final W1 = 0.4522 (123.0 min)
+(b) eps = 0.25, U = 0.03, MPC, seed 6: mean ||u||^2 = 1.031e-05, final W1 = 0.4507 (123.0 min)
+(b) eps = 0.25, U = 0.03, MPC, seed 1: mean ||u||^2 = 1.196e-05, final W1 = 0.4515 (123.1 min)
+(b) eps = 0.25, U = 0.05, MPC, seed 6: mean ||u||^2 = 1.179e-05, final W1 = 0.4500 (123.1 min)
+(b) eps = 0.25, U = 0.05, MPC, seed 2: mean ||u||^2 = 1.449e-05, final W1 = 0.4511 (123.4 min)
+(b) eps = 0.25, U = 0.05, MPC, seed 3: mean ||u||^2 = 1.323e-05, final W1 = 0.4555 (123.7 min)
+(b) eps = 0.25, U = 0.03, MPC, seed 3: mean ||u||^2 = 1.165e-05, final W1 = 0.4496 (123.8 min)
+(b) eps = 0.25, U = 0.1, MPC, seed 3: mean ||u||^2 = 2.044e-05, final W1 = 0.4508 (124.1 min)
+(b) eps = 0.25, U = 0.05, MPC, seed 4: mean ||u||^2 = 1.282e-05, final W1 = 0.4542 (124.2 min)
+(b) eps = 0.25, U = 0.05, MPC, seed 1: mean ||u||^2 = 1.341e-05, final W1 = 0.4481 (124.2 min)
+(b) eps = 0.25, U = 0.1, MPC, seed 4: mean ||u||^2 = 2.022e-05, final W1 = 0.4527 (124.3 min)
+(b) eps = 0.25, U = 0.03, no low level, seed 1: mean ||u||^2 = 1.008e-05, final W1 = 0.5192 (124.6 min)
+(b) eps = 0.25, U = 0.03, no low level, seed 2: mean ||u||^2 = 1.077e-05, final W1 = 0.5251 (124.6 min)
+(b) eps = 0.25, U = 0.03, MPC, seed 4: mean ||u||^2 = 1.118e-05, final W1 = 0.4509 (124.8 min)
+(b) eps = 0.25, U = 0.03, MPC, seed 5: mean ||u||^2 = 1.061e-05, final W1 = 0.4538 (124.9 min)
+(b) eps = 0.25, U = 0.1, MPC, seed 6: mean ||u||^2 = 1.871e-05, final W1 = 0.4463 (125.3 min)
+(b) eps = 0.25, U = 0.1, MPC, seed 1: mean ||u||^2 = 2.032e-05, final W1 = 0.4428 (125.8 min)
+(a) eps = 0, U = 0.01, MPC, seed 1: mean ||u||^2 = 8.999e-02, final W1 = NaN (5.0 min)
+(a) eps = 0, U = 0.01, MPC, seed 3: mean ||u||^2 = 8.905e-02, final W1 = NaN (5.0 min)
+(a) eps = 0, U = 0.01, MPC, seed 4: mean ||u||^2 = 9.002e-02, final W1 = NaN (5.0 min)
+(a) eps = 0, U = 0.01, MPC, seed 2: mean ||u||^2 = 9.011e-02, final W1 = NaN (5.0 min)
+(a) eps = 0.05, U = 0.01, MPC, seed 2: mean ||u||^2 = 2.800e-04, final W1 = NaN (4.8 min)
+(b) eps = 0.25, U = 0.1, no low level, seed 4: mean ||u||^2 = 1.352e-05, final W1 = 0.7381 (112.2 min)
+(b) eps = 0.25, U = 0.03, no low level, seed 3: mean ||u||^2 = 9.696e-06, final W1 = 0.5284 (112.0 min)
+(b) eps = 0.25, U = 0.05, no low level, seed 2: mean ||u||^2 = 1.157e-05, final W1 = 0.6492 (112.1 min)
+(b) eps = 0.25, U = 0.03, no low level, seed 4: mean ||u||^2 = 9.210e-06, final W1 = 0.5199 (112.8 min)
+(b) eps = 0.25, U = 0.1, no low level, seed 1: mean ||u||^2 = 1.440e-05, final W1 = 0.7865 (112.5 min)
+(b) eps = 0.25, U = 0.1, no low level, seed 2: mean ||u||^2 = 1.515e-05, final W1 = 0.7289 (112.9 min)
+(b) eps = 0.25, U = 0.03, no low level, seed 5: mean ||u||^2 = 8.823e-06, final W1 = 0.5423 (112.3 min)
+(b) eps = 0.25, U = 0.05, no low level, seed 4: mean ||u||^2 = 9.999e-06, final W1 = 0.6507 (112.9 min)
+(b) eps = 0.25, U = 0.05, no low level, seed 1: mean ||u||^2 = 1.084e-05, final W1 = 0.6590 (111.5 min)
+(b) eps = 0.25, U = 0.05, no low level, seed 5: mean ||u||^2 = 9.561e-06, final W1 = 0.6539 (113.1 min)
+(b) eps = 0.25, U = 0.1, no low level, seed 5: mean ||u||^2 = 1.303e-05, final W1 = 0.7025 (113.0 min)
+(b) eps = 0.25, U = 0.03, no low level, seed 6: mean ||u||^2 = 8.699e-06, final W1 = 0.5435 (112.5 min)
+(b) eps = 0.25, U = 0.1, no low level, seed 6: mean ||u||^2 = 1.303e-05, final W1 = 0.7241 (113.0 min)
+(a) eps = 0, U = 0.01, MPC, seed 5: mean ||u||^2 = 8.876e-02, final W1 = NaN (4.4 min)
+(b) eps = 0.25, U = 0.05, no low level, seed 3: mean ||u||^2 = 1.050e-05, final W1 = 0.6354 (113.3 min)
+(b) eps = 0.25, U = 0.05, no low level, seed 6: mean ||u||^2 = 9.482e-06, final W1 = 0.6757 (113.5 min)
+(b) eps = 0.25, U = 0.1, no low level, seed 3: mean ||u||^2 = 1.404e-05, final W1 = 0.6987 (112.2 min)
+(a) eps = 0.05, U = 0.01, MPC, seed 4: mean ||u||^2 = 2.244e-04, final W1 = NaN (4.9 min)
+(a) eps = 0.05, U = 0.01, MPC, seed 3: mean ||u||^2 = 2.420e-04, final W1 = NaN (4.9 min)
+(a) eps = 0, U = 0.01, MPC, seed 6: mean ||u||^2 = 9.079e-02, final W1 = NaN (4.7 min)
+(a) eps = 0.05, U = 0.01, MPC, seed 1: mean ||u||^2 = 2.591e-04, final W1 = NaN (4.8 min)
+(a) eps = 0.05, U = 0.01, MPC, seed 5: mean ||u||^2 = 2.158e-04, final W1 = NaN (4.8 min)
+(a) eps = 0.25, U = 0.01, MPC, seed 2: mean ||u||^2 = 1.219e-05, final W1 = NaN (4.8 min)
+(a) eps = 0.05, U = 0.01, MPC, seed 6: mean ||u||^2 = 2.093e-04, final W1 = NaN (4.7 min)
+(a) eps = 0.25, U = 0.01, MPC, seed 1: mean ||u||^2 = 1.125e-05, final W1 = NaN (4.6 min)
+(a) eps = 0.25, U = 0.01, MPC, seed 3: mean ||u||^2 = 1.082e-05, final W1 = NaN (4.5 min)
+(a) eps = 0.25, U = 0.01, MPC, seed 6: mean ||u||^2 = 9.592e-06, final W1 = NaN (4.4 min)
+(a) eps = 0.25, U = 0.01, MPC, seed 5: mean ||u||^2 = 9.831e-06, final W1 = NaN (4.4 min)
+(a) eps = 0.25, U = 0.01, MPC, seed 4: mean ||u||^2 = 1.029e-05, final W1 = NaN (4.3 min)
+All runs done in 4.0 h.
+
+(a) mean over 6 seeds of the last 50 steps
+   eps     ||u||^2
+ 0.000   9.098e-02
+ 0.050   1.324e-05
+ 0.250   1.860e-06
+
+(b) W1, mean over 6 seeds
+            final            mean, last 50 steps
+   U      MPC   no low level      MPC   no low level
+  0.03   0.4521     0.5297       0.4573     0.5239
+  0.05   0.4522     0.6540       0.4570     0.6519
+  0.10   0.4493     0.7298       0.4548     0.7320
+Saved paper_figure_w.pdf (13 x 13 cm).
+Parallel pool using the 'Processes' profile is shutting down.
