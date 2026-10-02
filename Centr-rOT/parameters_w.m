@@ -14,6 +14,21 @@ params.N = 500;             % number of agents
 params.T = 1000;            % number of DOOT steps
 params.dt_cont = 0.5;       % DOOT time step ('kl': keep dt_cont <= 0.5/kappa, else it may be unstable)
 
+%% Low-level MPC and wind
+params.use_mpc = false;     % false: DOOT velocity directly; true: use low-level MPC
+params.n_inner = 10;        % MPC steps per DOOT step
+params.Q_x = 1;             % MPC position weight
+params.Q_u = 3.5e-3;        % MPC control weight
+params.Nh = 10;             % MPC horizon
+params.gamma = 1;            % MPC terminal-cost scale
+params.u_max = [];           % acceleration bound; [] means unconstrained
+params.wind_model = 'none';  % 'none', 'uniform' or 'taylor_green'
+params.wind_U = 0.01;        % wind speed
+params.wind_theta = 0;       % uniform wind direction [rad]
+params.wind_L = 6;            % Taylor-Green vortex period
+params.drift_mode = 'estimated'; % 'measured', 'estimated' or 'none'
+params.drift_alpha = 0.2;    % estimated-drift filter gain in (0, 1]
+
 %% Kernels (Wendland support radii)
 params.h_agent = 2;       % agent density rho_N
 params.num_nodes_axis = 33; % potential phi: 33 x 33 fixed nodes, spacing 16/32 = 0.5

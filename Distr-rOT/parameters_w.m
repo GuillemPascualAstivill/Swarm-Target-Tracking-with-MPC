@@ -14,6 +14,21 @@ params.N = 500;             % number of agents
 params.T = 500;             % number of DOOT steps
 params.dt_cont = 0.85;      % DOOT time step
 
+%% Low-level MPC and wind
+params.use_mpc = true;     % false: DOOT velocity directly; true: use low-level MPC
+params.n_inner = 10;        % MPC steps per DOOT step
+params.Q_x = 1;             % MPC position weight
+params.Q_u = 3.5;           % MPC control weight
+params.Nh = 10;             % MPC horizon
+params.gamma = 1;            % MPC terminal-cost scale
+params.u_max = [];           % acceleration bound; [] means unconstrained
+params.wind_model = 'taylor_green';  % 'none', 'uniform' or 'taylor_green'
+params.wind_U = 0.1;        % wind speed
+params.wind_theta = 0;       % uniform wind direction [rad]
+params.wind_L = 6;           % Taylor-Green vortex period
+params.drift_mode = 'estimated'; % 'measured', 'estimated' or 'none'
+params.drift_alpha = 0.2;    % estimated-drift filter gain in (0, 1]
+
 %% Kernel bandwidths (Wendland support radii)
 params.h_agent = 2;         % agent density rho_N
 params.h_field = 2;         % potential field phi
@@ -28,7 +43,7 @@ params.delta_ridge = 4e-3;  % ridge (delta/2)*||alpha||^2
 params.terminal = 'l2';     % 'kl' or 'l2'
 params.kappa = 0.2;         % 'kl': weight of the KL terminal cost
 params.kl_floor = 1e-6;     % 'kl': floor on the target, relative to its max
-params.epsilon_reg = 0;  % 'l2': eps in the terminal cost ||rho - rho*||^2 / (2 eps)
+params.epsilon_reg = 0.15;  % 'l2': eps in the terminal cost ||rho - rho*||^2 / (2 eps)
 
 %% Grid on [-8, 8]^2
 grid_res = 100;

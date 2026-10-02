@@ -14,34 +14,24 @@ script_dir = fileparts(mfilename('fullpath'));
 addpath(script_dir, fullfile(fileparts(script_dir), 'MPC'), ...
     fullfile(fileparts(script_dir), 'WINDS'));
 
-%% Settings
-use_low_level_mpc = false;    % true:  agents track the DOOT plan with the low-level MPC
-                             % false: agents move with the DOOT velocity, pos = pos + dt*v
-n_inner = 10;                % MPC steps per DOOT step
-Q_x = 1;                     % MPC position weight
-Q_u = 3.5e-3;                % MPC control weight
-Nh = 10;                     % MPC horizon
-gamma = 1;                   % MPC terminal-cost scale
-wind_model = 'none'; % MPC only: 'none', 'uniform' or 'taylor_green'
-wind_U = 0.01;               % wind speed
-wind_theta = 0;              % 'uniform' wind direction [rad]
-wind_L = 6;                  % 'taylor_green' vortex period
-
 N = params.N;
 T = params.T;
 dt_outer = params.dt_cont;
-dt_inner = dt_outer / n_inner;
+dt_inner = dt_outer / params.n_inner;
 dA = params.dx * params.dy;  % grid cell area
 gr = params.grid_res;
 
-if use_low_level_mpc
-    mpc = low_level_mpc_setup(dt_inner, Q_x, Q_u, Nh, gamma);
-    switch wind_model
-        case 'none',         wind_fn = @(tt,p) zeros(size(p));
-        case 'uniform',      wind_fn = @(tt,p) uniform_wind(tt, p, wind_U, wind_theta);
-        case 'taylor_green', wind_fn = @(tt,p) taylor_green_wind(tt, p, wind_U, wind_L);
-        otherwise,           error('Unknown wind_model ''%s''.', wind_model);
-    end
+switch params.wind_model
+    case 'none',         wind_fn = @(tt,p) zeros(size(p));
+    case 'uniform',      wind_fn = @(tt,p) uniform_wind(tt, p, params.wind_U, params.wind_theta);
+    case 'taylor_green', wind_fn = @(tt,p) taylor_green_wind(tt, p, params.wind_U, params.wind_L);
+    otherwise, error('main_nodes:windModel', ...
+        'wind_model must be ''none'', ''uniform'' or ''taylor_green''.');
+end
+
+if params.use_mpc
+    mpc = low_level_mpc_setup(dt_inner, params.Q_x, params.Q_u, params.Nh, ...
+        params.gamma, params.u_max);
 end
 
 %% Fixed node basis for phi (built once)
@@ -53,6 +43,7 @@ fprintf('Node basis: %d nodes, spacing %.2f, h_node = %.2f\n', M, ...
 %% Simulation
 pos = params.pos0;           % agent positions
 vel = zeros(N, 2);           % agent velocities (MPC only)
+d_hat = zeros(N, 2);         % agents' wind estimates ('estimated' only)
 % beta and lam are carried over between steps as the warm start (exact: the basis is fixed)
 beta = zeros(M, 1);          % node coefficients, phi(x) = sum_a beta_a K_node(x - A_a)
 lam  = zeros(N + M, 1);      % multipliers of |grad phi| <= 1, at the agents then the nodes
@@ -91,24 +82,33 @@ for t = 1:T
     target_hist(:, :, t) = reshape(rho_s, gr, gr);
 
     % Motion
-    if use_low_level_mpc
+    if params.use_mpc
         % Each agent tracks the reference p_start + tau*v over n_inner MPC steps
         p_start = pos;
-        for s = 1:n_inner
+        for s = 1:params.n_inner
             tau = (s - 1) * dt_inner;
             time_now = (t - 1) * dt_outer + tau;
             p_ref = p_start + tau * v;
-            for m = 1:N
-                p_old = pos(m, :);
-                v_old = vel(m, :);
-                [u, v_next, ~, mpc_info] = low_level_mpc(p_old, v_old, p_ref(m, :), ...
-                    v(m, :), time_now, wind_fn, mpc);
-                vel(m, :) = v_next;
-                pos(m, :) = p_old + dt_inner * (v_old + mpc_info.d) + 0.5 * dt_inner^2 * u;
+            d = wind_fn(time_now, pos);
+            switch params.drift_mode
+                case 'measured',  d_mpc = d;
+                case 'estimated', d_mpc = d_hat;
+                case 'none',      d_mpc = zeros(N, 2);
+                otherwise, error('main_nodes:driftMode', ...
+                    'drift_mode must be ''measured'', ''estimated'' or ''none''.');
+            end
+            [u, ~] = low_level_mpc(pos, vel, p_ref, v, d_mpc, mpc);
+            pos_pred = pos + dt_inner * vel + 0.5 * dt_inner^2 * u;
+            pos = pos + dt_inner * (vel + d) + 0.5 * dt_inner^2 * u;
+            vel = vel + dt_inner * u;
+            if strcmp(params.drift_mode, 'estimated')
+                d_hat = (1 - params.drift_alpha) * d_hat + ...
+                    params.drift_alpha * (pos - pos_pred) / dt_inner;
             end
         end
     else
-        pos = pos + dt_outer * v;  %#ok<UNRCH>  (reached when use_low_level_mpc = false)
+        d = wind_fn((t - 1) * dt_outer, pos);
+        pos = pos + dt_outer * (v + d);
     end
     pos_hist(:, :, t) = pos;
 

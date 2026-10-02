@@ -23,6 +23,12 @@ Each video has four panels: target density, agent density, potential field φ, a
 Without regularization the agents collapse into dense clusters and the commanded
 speeds are much larger. With the L² regularization the swarm spreads over the target.
 
+| Distributed, Taylor-Green wind (MPC ON) | Distributed, wind (MPC OFF) |
+|---|---|
+| ![distributed wind MPC](media/wind_mpc.gif) | ![distributed wind no MPC](media/wind_no_mpc.gif) |
+
+The proposed MPC effectively handles the external disturbance.
+
 **Centralized variant (not in the paper).** Same method, but the potential φ is
 written on a fixed grid of kernels covering the domain instead of kernels centred at
 the agents. It is included only for comparison.

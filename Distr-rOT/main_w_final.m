@@ -10,39 +10,22 @@ script_dir = fileparts(mfilename('fullpath'));
 addpath(script_dir, fullfile(fileparts(script_dir), 'WINDS'), ...
     fullfile(fileparts(script_dir), 'MPC'));
 
-%% Settings
-use_mpc = false;       % false: agents move with the DOOT velocity
-                       % true:  agents track the DOOT plan with the low-level MPC
-n_inner = 10;          % MPC steps per DOOT step
-Q_x = 1;               % MPC position weight
-Q_u = 3.5;             % MPC control weight
-Nh = 10;               % MPC horizon
-gamma = 1;             % MPC terminal-cost scale
-u_max = [];            % MPC acceleration bound |u| <= u_max on each axis
-                       % []:    unconstrained, constant gain from idare
-                       % value: box-constrained QP over the horizon (quadprog)
-wind_model = 'none';   % MPC only: 'none', 'uniform' or 'taylor_green'
-wind_U = 0.01;         % wind speed
-wind_theta = 0;        % 'uniform' wind direction [rad]
-wind_L = 6;            % 'taylor_green' vortex period
-drift_mode = 'measured';  % wind the MPC compensates for:
-                       % 'measured':  the true local wind (wind sensor)
-                       % 'estimated': estimated from the agent's own motion
-                       % 'none':      no compensation
-drift_alpha = 0.2;     % 'estimated': estimator gain in (0, 1], 1 = last step only
-
 N = params.N;
 T = params.T;
 dt_outer = params.dt_cont;
-dt_inner = dt_outer / n_inner;
+dt_inner = dt_outer / params.n_inner;
 
-if use_mpc
-    mpc = low_level_mpc_setup(dt_inner, Q_x, Q_u, Nh, gamma, u_max);
-    switch wind_model
-        case 'none',         wind_fn = @(tt,p) zeros(size(p));
-        case 'uniform',      wind_fn = @(tt,p) uniform_wind(tt, p, wind_U, wind_theta);
-        case 'taylor_green', wind_fn = @(tt,p) taylor_green_wind(tt, p, wind_U, wind_L);
-    end
+switch params.wind_model
+    case 'none',         wind_fn = @(tt,p) zeros(size(p));
+    case 'uniform',      wind_fn = @(tt,p) uniform_wind(tt, p, params.wind_U, params.wind_theta);
+    case 'taylor_green', wind_fn = @(tt,p) taylor_green_wind(tt, p, params.wind_U, params.wind_L);
+    otherwise, error('main_w_final:windModel', ...
+        'wind_model must be ''none'', ''uniform'' or ''taylor_green''.');
+end
+
+if params.use_mpc
+    mpc = low_level_mpc_setup(dt_inner, params.Q_x, params.Q_u, params.Nh, ...
+        params.gamma, params.u_max);
 end
 
 %% Simulation
@@ -62,21 +45,22 @@ for t = 1:T
     % DOOT: velocity command for every agent
     [v_doot, alpha, lambda] = plan_doot(pos, rho_target, alpha, lambda, params);
 
-    if use_mpc
+    if params.use_mpc
         % Low-level MPC tracks the reference p_start + tau*v_doot
         p_start = pos;
-        for s = 1:n_inner
+        for s = 1:params.n_inner
             tau = (s - 1) * dt_inner;
             time_now = (t - 1) * dt_outer + tau;
             p_ref = p_start + tau * v_doot;
             d = wind_fn(time_now, pos);     % true wind at every agent
 
             % Wind the MPC compensates for; the agents always drift with the true d
-            switch drift_mode
+            switch params.drift_mode
                 case 'measured',  d_mpc = d;
                 case 'estimated', d_mpc = d_hat;
                 case 'none',      d_mpc = zeros(N, 2);
-                otherwise, error('drift_mode must be ''measured'', ''estimated'' or ''none''.');
+                otherwise, error('main_w_final:driftMode', ...
+                    'drift_mode must be ''measured'', ''estimated'' or ''none''.');
             end
             [u, n_act] = low_level_mpc(pos, vel, p_ref, v_doot, d_mpc, mpc);
             n_active = n_active + n_act;
@@ -88,12 +72,14 @@ for t = 1:T
 
             % Estimate the wind from the gap between the measured and the
             % predicted position: needs self-localization, not a wind sensor
-            if strcmp(drift_mode, 'estimated')
-                d_hat = (1 - drift_alpha) * d_hat + drift_alpha * (pos - pos_pred) / dt_inner;
+            if strcmp(params.drift_mode, 'estimated')
+                d_hat = (1 - params.drift_alpha) * d_hat + ...
+                    params.drift_alpha * (pos - pos_pred) / dt_inner;
             end
         end
     else
-        pos = pos + dt_outer * v_doot;
+        d = wind_fn((t - 1) * dt_outer, pos);
+        pos = pos + dt_outer * (v_doot + d);
     end
 
     pos_hist(:, :, t) = pos;
@@ -104,10 +90,10 @@ for t = 1:T
     end
 end
 
-if use_mpc && ~isempty(u_max)
+if params.use_mpc && ~isempty(params.u_max)
     % 0% means the bound never acted, so the run equals the unconstrained one
     fprintf('Acceleration bound active in %.2f%% of the per-axis MPC solves.\n', ...
-        100 * n_active / (2 * N * n_inner * T));
+        100 * n_active / (2 * N * params.n_inner * T));
 end
 
 %% Video of the run
