@@ -18,7 +18,7 @@ params.dt_cont = 0.85;      % DOOT time step
 params.h_agent = 2;         % agent density rho_N
 params.h_field = 2;         % potential field phi
 
-%% Primal-dual solver (primal_dual_2.m)
+%% Primal-dual solver (primal_dual.m)
 params.pd_iters = 500;      % iterations per DOOT step
 params.etap = 0.05;         % primal step size
 params.etad = 0.25;         % dual step size

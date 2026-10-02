@@ -5,7 +5,8 @@
 
 parameters_w;
 script_dir = fileparts(mfilename('fullpath'));
-addpath(script_dir, fullfile(fileparts(script_dir), 'WINDS'));
+addpath(script_dir, fullfile(fileparts(script_dir), 'WINDS'), ...
+    fullfile(fileparts(script_dir), 'MPC'));
 results_dir = fullfile(script_dir, 'results');
 if ~exist(results_dir, 'dir'), mkdir(results_dir); end
 
@@ -131,6 +132,6 @@ function [v, alpha, lambda] = plan_doot(pos, rho_target, alpha, lambda, params)
     kernels = computeKernels_w(pos, params);
     integral = computeTargetint_w(pos, rho_target, params);
     w = sum(integral.agents_ag, 2) / params.N - integral.target_ag;
-    [alpha, lambda] = primal_dual_2(kernels, integral, w, params, alpha, lambda);
+    [alpha, lambda] = primal_dual(kernels, integral, w, params, alpha, lambda);
     v = -[kernels.D_x * alpha, kernels.D_y * alpha];
 end

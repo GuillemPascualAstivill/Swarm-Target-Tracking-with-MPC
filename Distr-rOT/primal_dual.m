@@ -1,5 +1,5 @@
-function [alpha, lambda] = primal_dual_2(kernels, integral, w, params, alpha, lambda)
-%primal_dual_2  Projected primal-dual iterations for the DOOT dual problem.
+function [alpha, lambda] = primal_dual(kernels, integral, w, params, alpha, lambda)
+%primal_dual  Projected primal-dual iterations for the DOOT dual problem.
 %
 %   Solves
 %       max_alpha  alpha'*w - R(alpha) - (delta/2)*||alpha||^2
