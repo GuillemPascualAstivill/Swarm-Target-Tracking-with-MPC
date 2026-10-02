@@ -33,10 +33,11 @@ The proposed MPC effectively handles the external disturbance.
 written on a fixed grid of kernels covering the domain instead of kernels centred at
 the agents. It is included only for comparison.
 
-![centralized](media/centralized.gif)
+| Centralized, KL penalty | Centralized, L2 penalty |
+|---|---|
+| ![centralized KL](media/centralized_kl.gif) | ![centralized L2](media/centralized_l2.gif) |
 
-Full-resolution videos: `Distr-rOT/results/OT_Distr_Reg.avi`,
-`Distr-rOT/results/OT_Distr_Unreg.avi` and `Centr-rOT/results/OT_Centr.avi`.
+Full-resolution videos: `Distr-rOT/results` and `Centr-rOT/results`.
 
 ## Repository
 

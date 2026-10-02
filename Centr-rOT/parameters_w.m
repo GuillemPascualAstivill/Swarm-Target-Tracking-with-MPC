@@ -41,7 +41,7 @@ params.etad = 0.25;         % dual step size
 params.delta_ridge = 1e-3;  % ridge (delta/2)*||beta||^2
 
 %% Terminal cost F (regularization toward the target)
-params.terminal = 'kl';     % 'kl':         F = kappa * KL(rho | rho*)
+params.terminal = 'l2_relaxed';     % 'kl':         F = kappa * KL(rho | rho*)
                             % 'l2':         F = ||rho - rho*||^2 / (2 eps), rho kept >= 0 (clipped)
                             % 'l2_relaxed': F = ||rho - rho*||^2 / (2 eps), rho may go < 0
 params.kappa = 1;           % 'kl': weight (larger = closer to the target)
