@@ -47,7 +47,7 @@ params.star_r0 = 3.5;
 params.star_A = 1.25;
 params.star_m = 5;
 params.star_sigma = 1.5;    % radial width
-params.target_floor = 1e-2; % additive uniform background before normalization
+params.target_floor = 0; % additive uniform background before normalization
 target_revs = 1;            % revolutions over the whole run (0 = static target)
 params.target_omega = 2*pi*target_revs / params.T;   % rotation per step [rad]
 

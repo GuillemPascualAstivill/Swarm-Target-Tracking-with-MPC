@@ -227,6 +227,7 @@ function out = run_fig(params, sp, wind_L, n_inner, mpc, W1_every)
 
     pos = sqrt(3) * randn(RandStream('mt19937ar', 'Seed', sp.seed), N, 2);
     vel = zeros(N, 2);
+    d_hat = zeros(N, 2);
     alpha = zeros(N, 1);
     lambda = zeros(N, 1);
     out.effort = zeros(T, 1);
@@ -240,17 +241,21 @@ function out = run_fig(params, sp, wind_L, n_inner, mpc, W1_every)
         for s = 1:n_inner
             d = taylor_green_wind(0, pos, sp.U, wind_L);   % true wind (steady field)
             if sp.use_mpc
-                % Track p_start + tau*v_doot, compensating the measured wind
+                % Track p_start + tau*v_doot, compensating the estimated wind
                 p_ref = p_start + (s - 1) * dt_inner * v_doot;
-                u = low_level_mpc(pos, vel, p_ref, v_doot, d, mpc);
+                u = low_level_mpc(pos, vel, p_ref, v_doot, d_hat, mpc);
             else
                 u = -mpc.K(2) * (vel - v_doot);
             end
             out.effort(t) = out.effort(t) + sum(u(:).^2) / (N * n_inner);
 
             % Exact step of xdot = v + d, vdot = u (u and d held over the step)
+            pos_pred = pos + dt_inner * vel + 0.5 * dt_inner^2 * u;
             pos = pos + dt_inner * (vel + d) + 0.5 * dt_inner^2 * u;
             vel = vel + dt_inner * u;
+            if sp.use_mpc
+                d_hat = 0.8 * d_hat + 0.2 * (pos - pos_pred) / dt_inner;
+            end
         end
 
         if sp.panel == 'b' && mod(t, W1_every) == 0
